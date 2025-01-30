@@ -58,5 +58,19 @@ module Geocoder::Result
     def place_id
       data.place_id if data.respond_to?(:place_id)
     end
+
+    # Wefunder Fork Specific
+    # Hacking and pushing this off
+    # Amazon Location Service does not provide a proper street_address API, meaning this will likely break for non-us addresses
+    # We should utilize Google instead, but I CBA to set that up rn bc I gotta fix termsets/purchases.
+    # I'm trying to maintain the same API as the google service with street_number and street_address so we can migrate going forward.
+    # However, this is not going to be upstreamed. I'll wait until someones shit gets fucked up and they find this commit.
+    def street_number
+      @place.address_number
+    end
+
+    def street_address
+      [street_number, route].compact.join(" ")
+    end
   end
 end
